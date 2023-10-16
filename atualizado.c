@@ -79,7 +79,7 @@ void PreencheVetor(int *vet, int nomeVet)
 }
 
 // recebe um vetor e seu nome, e imprime todas as posicoes com valores nao nulos 
-void ImprimeVetor(int *vet, int nomeVet)
+void ImprimeVetorEmDisco(int *vet, int nomeVet)
 {
     printf("Vetor %d : ", nomeVet);
     for (int i = 0; i < NUM_PALAVRAS; i++)
@@ -87,10 +87,28 @@ void ImprimeVetor(int *vet, int nomeVet)
         // se a frequencia eh igual a 0, entao nao imprime
         if (vet[i] != 0)
         {
-            printf("<%d,%d> ", i, vet[i]);
+            printf("<%d,%d> ", i, vet[i]); //a frequencia seria em float
         }
     }
     printf("\n");
+}
+
+// recebe um vetor e seu nome, e imprime todas as posicoes com valores nao nulos 
+void ImprimeVetorEmMemoria(int *vet, int nomeVet)
+{
+    printf("Vetor %d : ", nomeVet);
+    for (int i = 0; i < NUM_PALAVRAS; i++)
+    {
+        if (i == 0)
+        {
+            printf("[%d", vet[i]);
+        }
+        else
+        {
+            printf(",%d", vet[i]);
+        }        
+    }
+    printf("]\n");
 }
 
 int main()
@@ -100,9 +118,12 @@ int main()
     PreencheVetor(vet_2, 2);
     
     // impressao para facilitar a visualizacao dos vetores
-    printf("Padrao de impressao: <posicao,frequencia>\n");
-    ImprimeVetor(vet_1, 1);
-    ImprimeVetor(vet_2, 2);
+    printf("Padrao em disco: <posicao,frequencia>\n");
+    ImprimeVetorEmDisco(vet_1, 1);
+    ImprimeVetorEmDisco(vet_2, 2);
+    printf("Padrao em memoria:\n");
+    ImprimeVetorEmMemoria(vet_1, 1);
+    ImprimeVetorEmMemoria(vet_2, 2);
     
     printf("Cosseno de 1 e 2: %f\n", CalculaCossenoVetores(vet_1, vet_2));
     return 0;
