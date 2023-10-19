@@ -15,4 +15,4 @@
 
 find dados/ -type f -exec sh -c 'mkdir -p "vet/$(dirname "${0#dados/}")" && cat "$0" | tr -s "[:space:]" "\n" | sort | uniq  > "vet/${0#dados/}"' {} \;
 
-#verificar se a contagem da frequencia e melhor ser feita no .c ou em shell com comando grep
+#agora temos que usar um programa em c para criar e armazerar esses vetores
