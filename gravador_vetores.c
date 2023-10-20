@@ -2,23 +2,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-int findWordPosition(FILE *database_file, const char *search_word, int *frequency) {
-    char line[100];  // Adjust the size as needed
-    int position = 0;
-    *frequency = 0;
+int countWordFrequency(FILE *input_file, const char *search_word) {
+    char word[100];  // Adjust the size as needed
+    int frequency = 0;
 
-    while (fgets(line, sizeof(line), database_file) != NULL) {
-        position++;
-        if (strcmp(line, search_word) == 0) {
-            (*frequency)++;
+    while (fscanf(input_file, "%s", word) != EOF) {
+        if (strcmp(word, search_word) == 0) {
+            frequency++;
         }
     }
 
-    if (*frequency > 0) {
-        return position;
-    } else {
-        return -1;  // Return -1 if the word is not found
+    return frequency;
+}
+
+int findWordPosition(FILE *database_file, const char *search_word) {
+    char word[100];  // Adjust the size as needed
+    int position = 0;
+
+    while (fscanf(database_file, "%s", word) != EOF) {
+        position++;
+        if (strcmp(word, search_word) == 0) {
+            return position;
+        }
     }
+
+    return -1;  // Return -1 if the word is not found
 }
 
 int main(int argc, char *argv[]) {
@@ -57,18 +65,22 @@ int main(int argc, char *argv[]) {
 
     char search_word[100];  // Adjust the size as needed
     int position;
-    int frequency;
 
     // Read a word from the input file
     fscanf(input_file, "%s", search_word);
 
-    // Call the findWordPosition function to get the position and frequency
-    position = findWordPosition(database_file, search_word, &frequency);
+    // Call the findWordPosition function to get the position
+    position = findWordPosition(database_file, search_word);
+
+    int frequency;
+
+    // Call the countWordFrequency function to get the frequency in the input file
+    frequency = countWordFrequency(input_file, search_word);
 
     if (position != -1) {
-        fprintf(output_file, "Word '%s' found in the database at position %d. Frequency: %d\n", search_word, position, frequency);
+        fprintf(output_file, "Word '%s' found in the database at position %d. Frequency in input: %d\n", search_word, position, frequency);
     } else {
-        fprintf(output_file, "Word '%s' not found in the database.\n", search_word);
+        fprintf(output_file, "Word '%s' not found in the database. Frequency in input: %d\n", search_word, frequency);
     }
 
     fclose(input_file);
