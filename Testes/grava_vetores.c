@@ -1,6 +1,8 @@
 /*
-Este codigo gera um arquivo .vet com um texto no padrao <posicao,frequencia>
-./main vet/path/file.txt vet/path/file.vet banco.txt
+Ao chama esse codigo, ele deve receber como primeiro argumento o arquivo contendo a quantidade total de palavras
+do banco de dados e vai calcular o coseno de 2 vetores tambem passados como argumento
+
+./main qnt_palavras.txt vet/path/file.vet vet/path/file.vet
 
 */
 #include <stdio.h>

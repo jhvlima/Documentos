@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# compila a main
-gcc -o main main.c
+# compila
+gcc -o grava_vetores grava_vetores.c
 
 # executa o script que gera o banco.txt com todas as palavras de todos os aquivos do diretorio
 # especificado (dados)
@@ -21,7 +21,7 @@ find vet/ -type f -name "*.txt" | while read txt_file; do
         output_vet_file="$(dirname "${txt_file}")/$filename_without_extension.vet"
 
         # chama a main com os argumento: 1-input.txt 2-output.vet 3-input_banco.txt
-        ./main "$txt_file" "$output_vet_file" "banco.txt"
+        ./grava_vetores "$txt_file" "$output_vet_file" "banco.txt"
 
         # apagar o arquivo temporario
         rm "$txt_file"
