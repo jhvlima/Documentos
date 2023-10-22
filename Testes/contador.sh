@@ -15,4 +15,9 @@
 
 find dados/ -type f -exec sh -c 'mkdir -p "vet/$(dirname "${0#dados/}")" && cat "$0" | tr -s "[:space:]" "\n" | sort | uniq -c > "vet/${0#dados/}"' {} \;
 
-#agora temos que usar um programa em c para criar e armazerar esses vetores
+#   Onde melhorar:
+# passar o diretorio dados no terminal
+#
+#
+#
+#

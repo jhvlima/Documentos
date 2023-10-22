@@ -1,3 +1,8 @@
+/*
+Este codigo gera um arquivo .vet com um texto no padrao <posicao,frequencia>
+./main vet/path/file.txt vet/path/file.vet banco.txt
+
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,32 +48,24 @@ int main(int argc, char *argv[])
 
     char search_word[100]; // Adjust the size as needed
     char palavra_texto[100];
-    int position = 0;
-    int found = 0;
+    int position = 0, found = 0, frequency = 0;
 
     // Read a word from the database file
-    fscanf(database_file, "%s", search_word);
-
-    // Search for the word in the input file
-    while (fscanf(input_file, "%s", palavra_texto) != EOF)
+    while (fscanf(input_file, "%d %s", &frequency, palavra_texto) != EOF)
     {
-        position++;
-        if (strcmp(palavra_texto, search_word) == 0)
+        found = 0;
+        // Search for the word in the input file
+        while (fscanf(database_file, "%s", search_word) != EOF)
         {
-            found = 1;
-            break;
+            if (strcmp(palavra_texto, search_word) == 0)
+            {
+                break;
+            }
+            position++;
         }
+        fprintf(output_file, "<%d,%d> ", position, frequency);
+        position++;
     }
-
-    if (found)
-    {
-        fprintf(output_file, "Word '%s' found in the database at position %d.\n", search_word, position);
-    }
-    else
-    {
-        fprintf(output_file, "Word '%s' not found in the database.\n", search_word);
-    }
-
     fclose(input_file);
     fclose(output_file);
     fclose(database_file);
