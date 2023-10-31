@@ -1,0 +1,6 @@
+cosseno:
+
+Banco:
+
+clear:
+
