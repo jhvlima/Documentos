@@ -9,9 +9,8 @@
 # diretorio que vai ser processado
 Dir_dados="dados"
 
-mkdir -p resultados
 
-find $Dir_dados/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > "resultados/banco.txt"
+find $Dir_dados/ -type f -exec sh -c 'mkdir -p "vet/$(dirname "${0#dados/}")" && cat "$0" | tr -s "[:space:]" "\n" | sort | uniq -c > "vet/${0#dados/}" && cat "$0" >> "banco.txt"' {} \;
 
 #   Onde melhorar:
 # passar o diretorio dados no terminal

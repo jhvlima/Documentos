@@ -4,8 +4,9 @@ vetorizador.sh gera o diretorio vet com todos os arquivos da base de dados na fo
 
 cosseno.sh calcula o cosseno de dois vetores.
 
-cleaner.sh apaga os compilados e os resultados como o diretorio vet, banco de palavras etc.
+cleaner.sh apaga os compilados e os dados processados como o diretorio vet, banco de palavras etc.
 
 Estes scripts ainda nao estao flexiveis portanto, os path necessarios foram passados de forma estatica em cada script.
+Isso deverá ser atualizado em um makefile
 
 Mas o comando cosseno.sh ja funciona como deveria, faca o teste.
