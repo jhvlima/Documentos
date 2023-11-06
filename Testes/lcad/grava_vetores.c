@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         // Search for the word in the input file
         while (fscanf(database_file, "%s", search_word) != EOF)
         {
-            if (strcmp(palavra_texto, search_word) == 0)
+            if (!strcmp(palavra_texto, search_word))
             {
                 break;
             }
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     fclose(output_file);
     fclose(database_file);
 
-    printf("Search complete.\n");
+    printf("%s foi gravado com sucesso.\n", output_file_name);
 
     return 0;
 }
