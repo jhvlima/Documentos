@@ -141,6 +141,7 @@ int main(int argc, char *argv[])
     fclose(vet_2_file);
 
     // impressao para facilitar a visualizacao dos vetores
+    printf("\n");
     printf("Padrao em disco: <posicao,frequencia>\n");
     ImprimeVetorEmDisco(vet_1, 1, total_palavras);
     ImprimeVetorEmDisco(vet_2, 2, total_palavras);

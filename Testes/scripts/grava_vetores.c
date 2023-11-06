@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     fclose(output_file);
     fclose(database_file);
 
-    printf("Search complete.\n");
+    printf("Forma vetorial do texto foi salvo em %s com sucesso.\n", output_file_name);
 
     return 0;
 }
