@@ -1,7 +1,7 @@
 # Define variables
 CC = gcc
 CFLAGS = -lm
-SRC_DIR = src
+SRC_DIR = scripts
 OUTPUT_DIR = compilados
 RESULTS_DIR = resultados
 DATA_DIR = vet
@@ -11,7 +11,7 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
 
 # Generate object file names
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.c, $(OUTPUT_DIR)/%.o, $(SRC_FILES))
-
+src
 # Main targets
 all: cosseno_vetores banco vetorizador
 

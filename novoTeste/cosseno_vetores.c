@@ -9,9 +9,15 @@ e calcula o coseno de vetores passados como argumento
 #include <math.h>
 #include <stdlib.h>
 
+typedef struct
+{
+    long int posicao; // duas palavras sao da mesma dimensao se seus valores de posicao sao iguais
+    float frequencia; // se for 0 entao, a palavra nao eh gravada
+} tDado;
+
 // eh calculado o cosseno dos vetores usando a formula: cos = vet_1 * vet_2/(|vet_1|*|vet_2|)
 // ou seja, eh o produto escalar(ou produto interno) de vet_1 e vet_2 dividido produto dos modulos de vet_1 e vet_2
-float CalculaCossenoVetores(int *vetor_1, int *vetor_2, int NUM_PALAVRAS)
+float CalculaCossenoVetores(float *vetor_1, float *vetor_2, int NUM_PALAVRAS)
 {
     float ProdutoEscalar = 0, SomaNormaVet_1 = 0, SomaNormaVet_2 = 0, NormaVet_1 = 0, NormaVet_2 = 0;
 
@@ -45,7 +51,7 @@ float CalculaCossenoVetores(int *vetor_1, int *vetor_2, int NUM_PALAVRAS)
     }
 }
 // recebe um vetor e seu nome, e imprime todas as posicoes com valores nao nulos
-void ImprimeVetorEmDisco(int *vet, int nomeVet, int NUM_PALAVRAS)
+void ImprimeVetorEmDisco(float *vet, int nomeVet, int NUM_PALAVRAS)
 {
     printf("Vetor %d : ", nomeVet);
     for (int i = 0; i < NUM_PALAVRAS; i++)
@@ -53,25 +59,25 @@ void ImprimeVetorEmDisco(int *vet, int nomeVet, int NUM_PALAVRAS)
         // se a frequencia eh igual a 0, entao nao imprime
         if (vet[i] != 0)
         {
-            printf("<%d,%d> ", i, vet[i]); // a frequencia seria em float
+            printf("<%d,%f> ", i, vet[i]); // a frequencia seria em float
         }
     }
     printf("\n");
 }
 
 // recebe um vetor e seu nome, e imprime todas as posicoes com valores nao nulos
-void ImprimeVetorEmMemoria(int *vet, int nomeVet, int NUM_PALAVRAS)
+void ImprimeVetorEmMemoria(float *vet, int nomeVet, int NUM_PALAVRAS)
 {
     printf("Vetor %d : ", nomeVet);
     for (int i = 0; i < NUM_PALAVRAS; i++)
     {
         if (i == 0)
         {
-            printf("[%d", vet[i]);
+            printf("[%f", vet[i]);
         }
         else
         {
-            printf(",%d", vet[i]);
+            printf(",%f", vet[i]);
         }
     }
     printf("]\n");
@@ -89,7 +95,6 @@ int main(int argc, char *argv[])
     char *vet_1_name = argv[2];
     char *vet_2_name = argv[3];
 
-
     // Open the vet_1 file
     FILE *palavras_file = fopen(palvras_name, "r");
     if (palavras_file == NULL)
@@ -99,7 +104,7 @@ int main(int argc, char *argv[])
     }
 
     // Open the vet_1 file
-    FILE *vet_1_file = fopen(vet_1_name, "r");
+    FILE *vet_1_file = fopen(vet_1_name, "rb");
     if (vet_1_file == NULL)
     {
         perror("Error opening vet_1 file");
@@ -108,7 +113,7 @@ int main(int argc, char *argv[])
     }
 
     // Open the vet_2 file
-    FILE *vet_2_file = fopen(vet_2_name, "r");
+    FILE *vet_2_file = fopen(vet_2_name, "rb");
     if (vet_2_file == NULL)
     {
         perror("Error opening vet_2 file");
@@ -117,23 +122,26 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int total_palavras;
-    fscanf(palavras_file, "%d", &total_palavras);
-   
+    int palvras;
+    fscanf(palavras_file, "%d", &palvras);
+
+    long int total_palavras = palvras;
 
     long int pos_1 = 0, pos_2 = 0;
-    float  freq_1 = 0, freq_2 = 0;
-    char car;
+    float freq_1 = 0, freq_2 = 0;
+    tDado *palavras_1 = malloc(total_palavras * sizeof(tDado));
+    fread(palavras_1, sizeof(tDado), total_palavras, vet_1_file);
 
-    int *vet_1 = calloc(total_palavras, sizeof(int));
-
-    while (fscanf(vet_1_file, "%ld%f%c", &pos_1, &freq_1, &car) && car != '\n')
+/**/
+    float *vet_1 = malloc(total_palavras * sizeof(float));
+    while (fscanf(vet_1_file, "%ld%f", &pos_1, &freq_1) != EOF)
     {
         vet_1[pos_1] = freq_1;
+        printf("leu a posicao %ld\n", pos_1);
     }
 
-    int *vet_2 = calloc(total_palavras, sizeof(int));
-    while (fscanf(vet_2_file, "%ld%f%c", &pos_2, &freq_2, &car) && car != '\n')
+    float *vet_2 = malloc(total_palavras * sizeof(float));
+    while (fscanf(vet_2_file, "%ld%f", &pos_2, &freq_2) != EOF)
     {
         vet_2[pos_2] = freq_2;
     }

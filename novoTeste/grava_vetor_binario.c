@@ -9,6 +9,12 @@ do banco de dados e vai calcular o coseno de 2 vetores tambem passados como argu
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct
+{
+    long int posicao; // duas palavras sao da mesma dimensao se seus valores de posicao sao iguais
+    float frequencia; // se for 0 entao, a palavra nao eh gravada
+} tDado;
+
 int main(int argc, char *argv[])
 {
     if (argc != 4)
@@ -30,7 +36,7 @@ int main(int argc, char *argv[])
     }
 
     // Open the output file
-    FILE *output_file = fopen(output_file_name, "w");
+    FILE *output_file = fopen(output_file_name, "wb");
     if (output_file == NULL)
     {
         perror("Error opening output file");
@@ -56,10 +62,11 @@ int main(int argc, char *argv[])
     int long position = 0;
     float frequency = 0;
 
+    tDado palavra;
+
     // Read a word from the database file
     while (fscanf(input_file, "%f %s", &frequency, palavra_texto) != EOF)
     {
-
         // Search for the word in the input file
         while (fscanf(database_file, "%s", search_word) != EOF)
         {
@@ -69,34 +76,14 @@ int main(int argc, char *argv[])
             }
             position++;
         }
-        fprintf(output_file, "%ld%f ", position, frequency);
+        palavra.frequencia = frequency;
+        palavra.posicao = position;
+        fwrite(&palavra, sizeof(tDado), 1, output_file);
         position++;
-    }
-    fprintf(output_file, "\n");
-
-    fseek(database_file, 0, SEEK_SET);
-    // Read a word from the database file
-    while (fscanf(database_file, "%s", search_word) != EOF)
-    {
-        frequencia = 0;
-        // volta a o scanf para o inicio do documento
-        fseek(input_file, 0, SEEK_SET);
-        // Search for the word in the input file
-        while (fscanf(input_file, "%f %s", &frequency, palavra_texto) != EOF)
-        {
-            if (!strcmp(palavra_texto, search_word))
-            {
-                frequencia = frequency;
-            }
-        }
-        fprintf(output_file, "%d ", frequencia);
     }
 
     fclose(input_file);
     fclose(output_file);
     fclose(database_file);
-
-    printf("Forma vetorial do texto foi salvo em %s com sucesso.\n", output_file_name);
-
     return 0;
 }

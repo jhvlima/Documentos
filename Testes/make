@@ -1,0 +1,25 @@
+# Define the compiler (not needed in this case)
+CC = gcc
+
+# Define any flags (not needed in this case)
+CFLAGS =
+
+# Define targets and their corresponding shell commands
+cosseno: banco vetorizador
+	./scripts/cosseno.sh > log.txt
+	mv log.txt resultados
+
+vetorizador: 
+
+
+banco:
+	./scripts/gerador_banco.sh
+
+clear:
+	rm -f banco.txt grava_vetores cosseno_vetores num_palavras.txt cosseno.txt
+	rm -rf vet compilados resultados
+
+#add:
+
+# Define a target for cleaning up all generated files
+clean: clear

@@ -1,4 +1,4 @@
 #!/bin/bash
 # apaga os compilados e os resultados 
-rm banco.txt grava_vetores cosseno_vetores num_palavras.txt
+rm banco.txt grava_vetores cosseno_vetores num_palavras.txt cosseno.txt
 rm -r vet
