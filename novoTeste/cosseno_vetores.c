@@ -121,17 +121,19 @@ int main(int argc, char *argv[])
     fscanf(palavras_file, "%d", &total_palavras);
    
 
-    int freq_1 = 0, freq_2 = 0, pos_1 = 0, pos_2 = 0;
+    long int pos_1 = 0, pos_2 = 0;
+    float  freq_1 = 0, freq_2 = 0;
+    char car;
 
     int *vet_1 = calloc(total_palavras, sizeof(int));
 
-    while (fscanf(vet_1_file, "<%d,%d> ", &pos_1, &freq_1) != EOF)
+    while (fscanf(vet_1_file, "%ld%f%c", &pos_1, &freq_1, &car) && car != '\n')
     {
         vet_1[pos_1] = freq_1;
     }
 
     int *vet_2 = calloc(total_palavras, sizeof(int));
-    while (fscanf(vet_2_file, "<%d,%d> ", &pos_2, &freq_2) != EOF)
+    while (fscanf(vet_2_file, "%ld%f%c", &pos_2, &freq_2, &car) && car != '\n')
     {
         vet_2[pos_2] = freq_2;
     }

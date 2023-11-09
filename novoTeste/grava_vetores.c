@@ -50,10 +50,14 @@ int main(int argc, char *argv[])
 
     char search_word[100]; // Adjust the size as needed
     char palavra_texto[100];
-    int position = 0, frequency = 0, frequencia = 0;
+    int frequencia = 0;
+
+    // aplicar o padrao aqui
+    int long position = 0;
+    float frequency = 0;
 
     // Read a word from the database file
-    while (fscanf(input_file, "%d %s", &frequency, palavra_texto) != EOF)
+    while (fscanf(input_file, "%f %s", &frequency, palavra_texto) != EOF)
     {
 
         // Search for the word in the input file
@@ -65,7 +69,7 @@ int main(int argc, char *argv[])
             }
             position++;
         }
-        fprintf(output_file, "<%d,%d> ", position + 1, frequency);
+        fprintf(output_file, "%ld%f ", position, frequency);
         position++;
     }
     fprintf(output_file, "\n");
@@ -78,7 +82,7 @@ int main(int argc, char *argv[])
         // volta a o scanf para o inicio do documento
         fseek(input_file, 0, SEEK_SET);
         // Search for the word in the input file
-        while (fscanf(input_file, "%d %s", &frequency, palavra_texto) != EOF)
+        while (fscanf(input_file, "%f %s", &frequency, palavra_texto) != EOF)
         {
             if (!strcmp(palavra_texto, search_word))
             {
