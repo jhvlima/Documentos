@@ -1,18 +1,25 @@
 /*
-Ao chama esse codigo, ele deve receber como primeiro argumento o arquivo contendo a quantidade total de palavras
-do banco de dados e vai calcular o coseno de 2 vetores tambem passados como argumento
+    Este programa grava o vetor em forma binaria de um documento.
+    Os argmentos devem ser:
+        documento que vai ser veorizado (ordenado)
+        documento que vai receber o vetor binario
+        documento com o banco de palavras do seu universo (ordenado).
 
-./main qnt_palavras.txt vet/path/file.vet vet/path/file.vet
+    Os scripts contador.sh e gera_banco.sh ja ordenaram os documentos.
+
+    O programa grava uma palavra por vez com a struct tDado onde existe um long int para a posicao e um float para a frequencia, sendo que a 
+    posicao comeca do 0 e a se a frequencia de uma palavra for 0, ela nao sera gravada no vetor
 
 */
-#include <stdio.h>
+
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 typedef struct
 {
-    long int posicao; // duas palavras sao da mesma dimensao se seus valores de posicao sao iguais
-    float frequencia; // se for 0 entao, a palavra nao eh gravada
+    long int posicao; 
+    float frequencia; 
 } tDado;
 
 int main(int argc, char *argv[])
@@ -23,9 +30,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    char *input_file_name = argv[1];
-    char *output_file_name = argv[2];
-    char *database_file_name = argv[3];
+    char *input_file_name = argv[1]; // nome do arquivo que contem o documento que vai ser vetorizado
+    char *output_file_name = argv[2]; // nome do arquivo binario de saida 
+    char *database_file_name = argv[3]; // nome do arquivo que contem a lista com todas as palavras 
 
     // Open the input file
     FILE *input_file = fopen(input_file_name, "r");
@@ -54,32 +61,26 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    char search_word[100]; // Adjust the size as needed
-    char palavra_texto[100];
-    int frequencia = 0;
-
-    // aplicar o padrao aqui
-    int long position = 0;
-    float frequency = 0;
-
-    tDado palavra;
+    char palavra_banco[1000], palavra_documento[1000]; // variavel que recebe uma palavra por vez dos documentos
+    long int position = -1;
+    int frequency = 0; // recebe um int com a frequencia de uma palavra oriunda do comando 'uniq -c' de shell
+    tDado palavra; // estrutra que sera gravada no arquivo .bin
 
     // Read a word from the database file
-    while (fscanf(input_file, "%f %s", &frequency, palavra_texto) != EOF)
+    while (fscanf(input_file, "%d %s", &frequency, palavra_documento) != EOF)
     {
         // Search for the word in the input file
-        while (fscanf(database_file, "%s", search_word) != EOF)
+        while (fscanf(database_file, "%s", palavra_banco) != EOF)
         {
-            if (!strcmp(palavra_texto, search_word))
+            position++;
+            if (!strcmp(palavra_documento, palavra_banco))
             {
                 break;
             }
-            position++;
         }
-        palavra.frequencia = frequency;
+        palavra.frequencia = (float)frequency;
         palavra.posicao = position;
         fwrite(&palavra, sizeof(tDado), 1, output_file);
-        position++;
     }
 
     fclose(input_file);

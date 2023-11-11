@@ -10,3 +10,10 @@
 Dir_dados="dados"
 
 find $Dir_dados/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > "banco.txt"
+
+#   Onde melhorar:
+# passar o diretorio dados no terminal
+# escolher o nome do banco de palavras em uma variavel
+#
+#
+#
