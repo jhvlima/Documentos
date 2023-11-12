@@ -59,7 +59,7 @@ void ImprimeVetorEmDisco(float *vet, int nomeVet, int NUM_PALAVRAS)
         // se a frequencia eh igual a 0, entao nao imprime
         if (vet[i] != 0)
         {
-            printf("<%d,%f> ", i, vet[i]); // a frequencia seria em float
+            printf("<%d, %f> ", i, vet[i]); // a frequencia seria em float
         }
     }
     printf("\n");
@@ -77,7 +77,7 @@ void ImprimeVetorEmMemoria(float *vet, int nomeVet, int NUM_PALAVRAS)
         }
         else
         {
-            printf(",%f", vet[i]);
+            printf(", %f", vet[i]);
         }
     }
     printf("]\n");
