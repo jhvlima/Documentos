@@ -33,6 +33,7 @@ banco:
 	find $(DIR_DADOS)/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > ${UNIVERSO_PALAVRAS}
 
 contador:
+	# bash -c 
 	find $(DIR_DADOS)/ -type f -exec sh -c 'mkdir -p "$(DIR_VETORES)/$$(dirname "{}")" && cat "{}" | tr -s "[:space:]" "\n" | sort | uniq -c > "$(DIR_VETORES)/$${0#$(DIR_DADOS)/}"' {} \;
 	
 # Clean target

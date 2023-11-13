@@ -157,3 +157,19 @@ wc -l "banco.txt" > num_palavras.txt
 ./cosseno_vetores num_palavras.txt vet/teste1.bin vet/teste2.bin > cosseno.txt
 ./cosseno_vetores num_palavras.txt vet/teste2.bin vet/teste3.bin >> cosseno.txt
 ./cosseno_vetores num_palavras.txt vet/teste1.bin vet/teste3.bin >> cosseno.txt
+find dados/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > banco.txt
+find dados/ -type f -exec sh -c 'mkdir -p "vet/$(dirname "{}")" && cat "{}" | tr -s "[:space:]" "\n" | sort | uniq -c > "vet/${0#dados/}"' {} \;
+dados/path1/teste4.txt: 1: cannot create vet/path1/teste4.txt: Directory nonexistent
+gcc -o grava_vetor_binario grava_vetor_binario.c
+find vet/ -type f -name "*.txt" | while read txt_file; do \
+	if [ -f "$txt_file" ]; then \
+		filename_without_extension="$(basename -- "$txt_file" .txt)"; \
+		output_bin_file="$(dirname "$txt_file")/$filename_without_extension.bin"; \
+		./grava_vetor_binario "$txt_file" "$output_bin_file" banco.txt; \
+	fi; \
+done
+gcc -o cosseno_vetores cosseno_vetores.c -lm
+wc -l "banco.txt" > num_palavras.txt
+./cosseno_vetores num_palavras.txt vet/teste1.bin vet/teste2.bin > cosseno.txt
+./cosseno_vetores num_palavras.txt vet/teste2.bin vet/teste3.bin >> cosseno.txt
+./cosseno_vetores num_palavras.txt vet/teste1.bin vet/teste3.bin >> cosseno.txt
