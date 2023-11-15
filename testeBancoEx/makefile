@@ -1,8 +1,12 @@
 # Variable assignments
 DIR_DADOS = dados
 DIR_VETORES = vet
+
 UNIVERSO_PALAVRAS = banco.txt
 BANCO_EXTERNO = fi
+BANCO_EXTERNO_ORDENADO = ${BANCO_EXTERNO}_ordenado
+STOP_WORDS = portugues
+
 arquivo_teste_1 = vet/teste1.bin
 arquivo_teste_2 = vet/teste2.bin
 arquivo_teste_3 = vet/teste3.bin
@@ -12,7 +16,6 @@ all: cosseno
 
 cosseno: vetorizador
 	gcc -o cosseno_vetores cosseno_vetores.c -lm
-	wc -l "$(UNIVERSO_PALAVRAS)" > num_palavras.txt
 	./cosseno_vetores num_palavras.txt ${arquivo_teste_1} ${arquivo_teste_2} > cosseno.txt
 	./cosseno_vetores num_palavras.txt ${arquivo_teste_2} ${arquivo_teste_3} >> cosseno.txt
 	./cosseno_vetores num_palavras.txt ${arquivo_teste_1} ${arquivo_teste_3} >> cosseno.txt
@@ -23,22 +26,26 @@ vetorizador: banco contador
 		if [ -f "$$txt_file" ]; then \
 			filename_without_extension="$$(basename -- "$$txt_file" .txt)"; \
 			output_bin_file="$$(dirname "$$txt_file")/$$filename_without_extension.bin"; \
-			./grava_vetor_binario "$$txt_file" "$$output_bin_file" $(UNIVERSO_PALAVRAS); \
+			./grava_vetor_binario "$$txt_file" "$$output_bin_file" $(BANCO_EXTERNO_ORDENADO).txt; \
 		fi; \
 	done
 
 
 # Targets for generating banco and contador
 banco:
-	find $(DIR_DADOS)/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > ${UNIVERSO_PALAVRAS}
-
+	find $(DIR_DADOS)/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > ${BANCO_EXTERNO_ORDENADO}
+	wc -l "$(BANCO_EXTERNO_ORDENADO).txt" > num_palavras.txt
 ordena:
-	sort -k1 ${BANCO_EXTERNO}.txt > ./${BANCO_EXTERNO}_ordenado.txt
+	sort -k1 ${BANCO_EXTERNO}.txt > ./${BANCO_EXTERNO_ORDENADO}txt
 	
 contador:
-	# bash -c 
-	find $(DIR_DADOS)/ -type f -exec sh -c 'mkdir -p "$(DIR_VETORES)/$$(dirname "{}")" && cat "{}" | tr -s "[:space:]" "\n" | tr -d "[:punct:]" | tr "[:upper:]" "[:lower:]" | LC_COLLATE=C sort | uniq -c > "$(DIR_VETORES)/$${0#$(DIR_DADOS)/}"' {} \;
-	
+# bash -c 
+	# gera um arquivo com a frequencia e os token de cada documento
+	find $(DIR_DADOS)/ -type f -exec sh -c 'mkdir -p "$(DIR_VETORES)/$$(dirname "{}")" && cat "{}" | tr -s "[:space:]" "\n" | tr -d "[:punct:][:digit:]" | tr "[:upper:]" "[:lower:]" | iconv -f utf-8 -t ascii//TRANSLIT | LC_COLLATE=C sort | uniq -c > "$(DIR_VETORES)/$${0#$(DIR_DADOS)/}"' {} \;
+
+	# remove stop words
+	#grep -v -wFf ${STOP_WORDS} ${BANCO_EXTERNO_ORDENADO}.txt > ${}.txt
+
 # Clean target
 clean:
 	@rm -f banco.txt grava_vetores cosseno_vetores num_palavras.txt cosseno.txt grava_vetor_binario leitorBin
