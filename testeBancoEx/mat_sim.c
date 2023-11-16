@@ -62,5 +62,30 @@ int main(int argc, char *argv[])
     // Close the directory
     closedir(dir);
 
+void GeraMatrizSim(DIR *entrada)
+{
+    CriaMatriz();
+    for (long int i = 0; i < count; i++)// documnto a
+    {
+        for (long int i = 0; i < count; i++) // documento b
+        {
+            if (JaFoiGravado(mat,i,j) || EhIgual(i,j))
+            {
+                continue;
+            }
+            valor = Sim(i,j);
+            if (!valor)
+            {
+                continue;
+            }
+            GravaValor(mat, i, j);
+        }
+    }
+}   
+
+
+
+
+
     return EXIT_SUCCESS;
 }
