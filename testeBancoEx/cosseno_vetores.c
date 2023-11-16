@@ -8,6 +8,7 @@ e calcula o coseno de vetores passados como argumento
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "cosseno_vetores.h"
 
 typedef struct
 {

@@ -66,6 +66,8 @@ int main(int argc, char *argv[])
     int frequency = 0; // recebe um int com a frequencia de uma palavra oriunda do comando 'uniq -c' de shell
     tDado palavra; // estrutra que sera gravada no arquivo .bin
 
+    //printf("long int tem %d bytes\n", sizeof(long int));
+    //printf("long int tem %d bytes\n", sizeof(float));
     // Read a word from the database file
     while (fscanf(input_file, "%d %s", &frequency, palavra_documento) != EOF)
     {
