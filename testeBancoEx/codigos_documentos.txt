@@ -1,0 +1,7 @@
+vet/teste2.bin 173074
+vet/teste2.txt 173075
+vet/teste3.bin 173076
+vet/teste1.txt 173073
+vet/teste_2.bin 173078
+vet/teste3.txt 173077
+vet/teste1.bin 173072

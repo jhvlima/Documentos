@@ -1,0 +1,13 @@
+./cosseno_vetores.c 173057
+./ino.c 173066
+./mat_sim.c 173067
+./matrix_operations.h 173069
+./ino 173062
+./codigos_documentos.txt 173134
+./matrix_operations.c 173068
+./similaridade.c 173070
+./cod_docs.c 173110
+./codigos.txt 173126
+./cosseno_vetores.h 173058
+./cod_docs 173129
+./grava_sim.c 173059
