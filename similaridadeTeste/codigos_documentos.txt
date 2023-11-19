@@ -1,4 +1,0 @@
-vet/teste2.bin 173324
-vet/teste4.bin 173317
-vet/teste3.bin 173318
-vet/teste1.bin 173316

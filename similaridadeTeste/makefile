@@ -12,7 +12,7 @@ arquivo_teste_2 = vet/teste2.bin
 arquivo_teste_3 = vet/teste3.bin
 
 # Targets
-all: cosseno
+all: cosseno similaridade
 
 cosseno: vetorizador
 	gcc -o cosseno_vetores cosseno_vetores.c -lm
@@ -36,6 +36,7 @@ vetorizador: banco contador
 banco:
 	find $(DIR_DADOS)/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > ${UNIVERSO_PALAVRAS}
 	wc -l "$(UNIVERSO_PALAVRAS)" > num_palavras.txt
+
 ordena:
 	sort -k1 ${BANCO_EXTERNO}.txt > ./${BANCO_EXTERNO_ORDENADO}txt
 	
@@ -47,7 +48,11 @@ contador:
 	# remove stop words
 	#grep -v -wFf ${STOP_WORDS} ${BANCO_EXTERNO_ORDENADO}.txt > ${}.txt
 
+similaridade: vetorizador
+	gcc -o cod_docs cod_docs.c -lm
+	./cod_docs ${DIR_VETORES} num_palavras.txt > result_similaridade.txt
+
 # Clean target
 clean:
-	@rm -f banco.txt grava_vetores cosseno_vetores num_palavras.txt cosseno.txt grava_vetor_binario leitorBin
+	@rm -f banco.txt grava_vetores cosseno_vetores num_palavras.txt cosseno.txt grava_vetor_binario leitorBin result_similaridade.txt codigos_documentos.txt cod_docs 
 	@rm -rf vet
