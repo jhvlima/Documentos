@@ -3,7 +3,7 @@
 
     Eh gerado um codigos_documentos.txt que contem os arquivos e seus ino
 
-    Eh preciso passar no argumento o diretorio com os arquivos com vetores de documentos em formato binario e um arquivo que 
+    Eh preciso passar no argumento o diretorio com os arquivos com vetores de documentos em formato binario e um arquivo que
     contem a quantidade total de palavras que o banco de palavras possui.
 
     [---Concertar o vazamento de memoria---]
@@ -67,7 +67,7 @@ void listFilesInDirectory(const char *directoryPath)
 float *MemorizaVetor(FILE *file, int total_palavras)
 {
     tDado palavra;
-    float *vet = calloc(1, total_palavras);
+    float *vet = calloc(1, total_palavras * sizeof(float));
 
     // while (fscanf(vet_1_file, "%ld %f ", &pos_1, &freq_1) != EOF) // Check if two values were successfully read
     while (fread(&palavra, sizeof(tDado), 1, file) == 1)
@@ -130,7 +130,7 @@ float CalculaCossenoVetores(float *vetor_1, float *vetor_2, int NUM_PALAVRAS)
 }
 
 /*
-    Calcula a similaridade de dois documentos 
+    Calcula a similaridade de dois documentos
 */
 float CalculaSimilaridade(FILE *file_1, FILE *file_2, int total_palavras)
 {
@@ -138,19 +138,17 @@ float CalculaSimilaridade(FILE *file_1, FILE *file_2, int total_palavras)
     float *vet_2 = MemorizaVetor(file_2, total_palavras);
     float resultado = CalculaCossenoVetores(vet_1, vet_2, total_palavras);
 
-    if (vet_1)
+    if (vet_1 != NULL)
     {
         free(vet_1);
     }
-    if (vet_2)
+    if (vet_2 != NULL)
     {
         free(vet_2);
     }
 
     return resultado;
 }
-
-
 
 int main(int argc, char *argv[])
 {
@@ -168,6 +166,7 @@ int main(int argc, char *argv[])
     banco_palavras_file = fopen(banco_palavras_name, "r");
     int total_palavras;
     fscanf(banco_palavras_file, "%d", &total_palavras);
+    fclose(banco_palavras_file);
 
     //  Abre o memso diretorio com dois ponteiros diferentes para realizar a iteracao de forma idependente
     DIR *dir_1 = opendir(argv[1]);
@@ -184,12 +183,15 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    FILE *matriz;
+    matriz = fopen("sim_cosseno.bin", "wb");
+
     struct dirent *entry_1;
     struct dirent *entry_2;
 
     int posicao_diretorio_1 = 0, posicao_diretorio_2 = 0;
 
-    printf("Comecou o processo\n");
+    printf("Comecou o processo de leitura dos diretorios\n");
 
     // Read the directory entries
     while ((entry_1 = readdir(dir_1)) != NULL)
@@ -198,14 +200,20 @@ int main(int argc, char *argv[])
         {
             continue;
         }
+        posicao_diretorio_2 = posicao_diretorio_1;
         posicao_diretorio_1++;
-        posicao_diretorio_2 = 0;
         // Read the directory entries
+        printf("\n");
+        printf("LOOP DO %s\n", entry_1->d_name);
         rewinddir(dir_2);
         while ((entry_2 = readdir(dir_2)) != NULL)
         {
-            posicao_diretorio_2++;
-            if ((entry_1->d_ino == entry_2->d_ino) || (posicao_diretorio_2 > posicao_diretorio_1))
+            if (posicao_diretorio_2)
+            {
+                posicao_diretorio_2--;
+                continue;
+            }
+            if (entry_1->d_ino == entry_2->d_ino)
             {
                 continue;
             }
@@ -238,19 +246,25 @@ int main(int argc, char *argv[])
                 return EXIT_FAILURE;
             }
 
-
-
             printf("file1: %s\n", full_path_1);
             printf("file2: %s\n", full_path_2);
 
             float valor = CalculaSimilaridade(file_1, file_2, total_palavras);
             if (valor)
             {
+                fwrite(&valor, sizeof(float), 1, matriz);
                 printf("<%s , %s> = %f\n", full_path_1, full_path_2, valor);
+            }
+            else
+            {
+                printf("Similaridade 0 \n");
             }
             fclose(file_1);
             fclose(file_2);
         }
     }
+    fclose(matriz);
+    closedir(dir_1);
+    closedir(dir_2);
     return 0;
 }
