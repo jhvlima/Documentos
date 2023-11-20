@@ -16,25 +16,38 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        fprintf(stderr, "Usage: %s <directory>\n", argv[0]);
-        return EXIT_FAILURE;
+        printf("Precisa passar o path do diretorio no argumento.\n");
+        return 1;
     }
 
     // Open the directory
-    DIR *dir = opendir(argv[1]);
-    if (dir == NULL)
+    DIR *dir_1 = opendir(argv[1]);
+    DIR *dir_2 = opendir(argv[1]);
+    if (dir_1 == NULL || dir_2 == NULL)
     {
-        perror("opendir");
-        return EXIT_FAILURE;
+        printf("Erro ao abrir o diretorio %s.\n", argv[1]);
+        return 1;
     }
 
-    struct dirent *entry;
+    struct dirent *entry_1;
+    struct dirent *entry_2;
 
     // Read the directory entries
-    while ((entry = readdir(dir)) != NULL)
+    while ((entry_1 = readdir(dir_1)) != NULL)
     {
+        while ((entry_2 = readdir(dir_2)) != NULL)
+        {
+            if (entry_1->d_ino == entry_2->d_ino)
+            {
+                continue;
+            }
+            
+
+
+
+
         // Skip "." and ".." entries
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+        if (strcmp(entry_1->d_name, ".") == 0 || strcmp(entry_1->d_name, "..") == 0)
         {
             continue;
         }
