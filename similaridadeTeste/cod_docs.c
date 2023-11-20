@@ -17,6 +17,16 @@
 #include <math.h>
 #include <sys/stat.h>
 
+// padrao de impressão binario na matriz de similaridade binária 
+typedef struct
+{
+    int codigo_1; // neste caso os codigos sao os ino dos documentos 
+    int codigo_2;
+    float valor;
+}tSimilaridade;
+
+
+
 typedef struct
 {
     long int posicao; // duas palavras sao da mesma dimensao se seus valores de posicao sao iguais
