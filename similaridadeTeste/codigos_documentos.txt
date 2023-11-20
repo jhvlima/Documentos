@@ -1,5 +1,5 @@
-vet/teste2.bin 61769
-vet/teste4.bin 61766
-vet/teste3.bin 61767
-vet/teste5.bin 61765
-vet/teste1.bin 61764
+vet/teste5.bin 14300978
+vet/teste1.bin 14300974
+vet/teste2.bin 14300975
+vet/teste4.bin 14300977
+vet/teste3.bin 14300976

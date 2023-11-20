@@ -194,6 +194,7 @@ int main(int argc, char *argv[])
     }
 
     FILE *matriz;
+    tSimilaridade sim;
     matriz = fopen("sim_cosseno.bin", "wb");
 
     struct dirent *entry_1;
@@ -259,10 +260,22 @@ int main(int argc, char *argv[])
             printf("file1: %s\n", full_path_1);
             printf("file2: %s\n", full_path_2);
 
+            if (entry_1->d_ino < entry_2->d_ino)
+            {
+                sim.codigo_1 = entry_1->d_ino;
+                sim.codigo_2 = entry_2->d_ino;
+            }
+            else
+            {
+                sim.codigo_2 = entry_1->d_ino;
+                sim.codigo_1 = entry_2->d_ino;
+            }
+            
             float valor = CalculaSimilaridade(file_1, file_2, total_palavras);
             if (valor)
             {
-                fwrite(&valor, sizeof(float), 1, matriz);
+                sim.valor = valor;
+                fwrite(&sim, sizeof(tSimilaridade), 1, matriz);
                 printf("<%s , %s> = %f\n", full_path_1, full_path_2, valor);
             }
             else

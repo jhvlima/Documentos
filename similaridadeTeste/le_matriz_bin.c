@@ -1,25 +1,41 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int main()
+typedef struct
 {
-    FILE *matriz = fopen("sim_cosseno.bin", "rb");
-    if (matriz == NULL)
+    int codigo_1;
+    int codigo_2;
+    float valor;
+} tSimilaridade;
+
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
     {
-        perror("fopen");
+        printf("Usage: %s input_binary_file\n", argv[0]);
         return 1;
     }
 
-    float valor;
+    char *input_file_name = argv[1];
+    FILE *input_file = fopen(input_file_name, "rb");
 
-    // Assuming you have a similar iteration logic
-    // You need to adapt the following loop based on your specific requirements
-    while (fread(&valor, sizeof(float), 1, matriz) == 1)
+    if (input_file == NULL)
     {
-        // Assuming you want to print each value
-        printf("%f\n", valor);
+        perror("Error opening input file");
+        return 1;
     }
 
-    fclose(matriz);
+    tSimilaridade similarity;
+
+    printf("Codigo 1  |Codigo 2| Valor\n");
+    printf("--------------------------\n");
+
+    while (fread(&similarity, sizeof(tSimilaridade), 1, input_file) == 1)
+    {
+        printf("%d, %d, %f\n", similarity.codigo_1, similarity.codigo_2, similarity.valor);
+    }
+
+    fclose(input_file);
 
     return 0;
 }
