@@ -1,53 +1,53 @@
 Comecou o processo de leitura dos diretorios
 
-LOOP DO teste5.bin
-file1: vet/teste5.bin
-file2: vet/teste1.bin
-Similaridade 0 
-file1: vet/teste5.bin
-file2: vet/teste2.bin
-Similaridade 0 
-file1: vet/teste5.bin
-file2: vet/teste4.bin
-<vet/teste5.bin , vet/teste4.bin> = 1.000000
-file1: vet/teste5.bin
-file2: vet/teste3.bin
-Similaridade 0 
-
-LOOP DO teste1.bin
-file1: vet/teste1.bin
-file2: vet/teste2.bin
-<vet/teste1.bin , vet/teste2.bin> = 0.998631
-file1: vet/teste1.bin
-file2: vet/teste4.bin
-<vet/teste1.bin , vet/teste4.bin> = 0.980196
-file1: vet/teste1.bin
-file2: vet/teste3.bin
-<vet/teste1.bin , vet/teste3.bin> = 0.842665
-
 LOOP DO teste2.bin
-file1: vet/teste2.bin
-file2: vet/teste1.bin
-<vet/teste2.bin , vet/teste1.bin> = 0.998631
 file1: vet/teste2.bin
 file2: vet/teste4.bin
 <vet/teste2.bin , vet/teste4.bin> = 0.968496
 file1: vet/teste2.bin
 file2: vet/teste3.bin
 <vet/teste2.bin , vet/teste3.bin> = 0.815139
+file1: vet/teste2.bin
+file2: vet/teste6.bin
+Similaridade 0 
+file1: vet/teste2.bin
+file2: vet/teste1.bin
+<vet/teste2.bin , vet/teste1.bin> = 0.998631
 
 LOOP DO teste4.bin
 file1: vet/teste4.bin
-file2: vet/teste2.bin
-<vet/teste4.bin , vet/teste2.bin> = 0.968496
-file1: vet/teste4.bin
 file2: vet/teste3.bin
 <vet/teste4.bin , vet/teste3.bin> = 0.925820
+file1: vet/teste4.bin
+file2: vet/teste6.bin
+Similaridade 0 
+file1: vet/teste4.bin
+file2: vet/teste1.bin
+<vet/teste4.bin , vet/teste1.bin> = 0.980196
 
 LOOP DO teste3.bin
 file1: vet/teste3.bin
-file2: vet/teste2.bin
-<vet/teste3.bin , vet/teste2.bin> = 0.815139
-file1: vet/teste3.bin
 file2: vet/teste4.bin
 <vet/teste3.bin , vet/teste4.bin> = 0.925820
+file1: vet/teste3.bin
+file2: vet/teste6.bin
+Similaridade 0 
+file1: vet/teste3.bin
+file2: vet/teste1.bin
+<vet/teste3.bin , vet/teste1.bin> = 0.842665
+
+LOOP DO teste6.bin
+file1: vet/teste6.bin
+file2: vet/teste3.bin
+Similaridade 0 
+file1: vet/teste6.bin
+file2: vet/teste1.bin
+Similaridade 0 
+
+LOOP DO teste1.bin
+file1: vet/teste1.bin
+file2: vet/teste3.bin
+<vet/teste1.bin , vet/teste3.bin> = 0.842665
+file1: vet/teste1.bin
+file2: vet/teste6.bin
+Similaridade 0 

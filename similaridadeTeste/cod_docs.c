@@ -6,8 +6,6 @@
     Eh preciso passar no argumento o diretorio com os arquivos com vetores de documentos em formato binario e um arquivo que
     contem a quantidade total de palavras que o banco de palavras possui.
 
-    [---Concertar o vazamento de memoria---]
-
 */
 
 #include <stdio.h>

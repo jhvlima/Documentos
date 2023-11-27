@@ -34,7 +34,7 @@ vetorizador: banco contador
 
 # Targets for generating banco and contador
 banco:
-	find $(DIR_DADOS)/ -type f -exec cat {} \; | tr -s '[:space:]' '\n' | sort | uniq > ${UNIVERSO_PALAVRAS}
+	bash -c 'find $(DIR_DADOS)/  -type f -exec cat {} \; | iconv -f utf-8 -t ascii//TRANSLIT | tr -d "[:punct:][:digit:]" | tr "[:upper:]" "[:lower:]" | tr -s "[:space:]" "\n" | sort | uniq > ${UNIVERSO_PALAVRAS}'
 	wc -l "$(UNIVERSO_PALAVRAS)" > num_palavras.txt
 
 ordena:
@@ -42,9 +42,10 @@ ordena:
 	
 contador:
 # bash -c 
-	# gera um arquivo com a frequencia e os token de cada documento
-	find $(DIR_DADOS)/ -type f -exec sh -c 'mkdir -p "$(DIR_VETORES)/$$(dirname "{}")" && cat "{}" | tr -s "[:space:]" "\n" | tr -d "[:punct:][:digit:]" | tr "[:upper:]" "[:lower:]" | iconv -f utf-8 -t ascii//TRANSLIT | LC_COLLATE=C sort | uniq -c > "$(DIR_VETORES)/$${0#$(DIR_DADOS)/}"' {} \;
-
+# gera um arquivo com a frequencia e os token de cada documento
+	./contador.sh
+	#bash -c 'find $(DIR_DADOS)/ -type f -execdir sh -c '\''mkdir -p "$(DIR_VETORES)/$$(dirname "{}")" && cat "{}" | iconv -f utf-8 -t ascii//TRANSLIT | tr -d "[:punct:][:digit:]" | tr "[:upper:]" "[:lower:]" | tr -s "[:space:]" "\n" | sort | uniq -c > "$(DIR_VETORES)/$${0#$(DIR_DADOS)/}"'\'' \;'
+	#bash -c 'find $(DIR_DADOS)/ -type f -exec bash -c '\''mkdir -p "$(DIR_VETORES)/$$(dirname "{}")" && cat "{}" | iconv -f utf-8 -t ascii//TRANSLIT | tr -d "[:punct:][:digit:]" | tr "[:upper:]" "[:lower:]" | tr -s "[:space:]" "\n" | sort | uniq -c > "$(DIR_VETORES)/$${0#$(DIR_DADOS)/}"'\'' {} \;'
 	# remove stop words
 	#grep -v -wFf ${STOP_WORDS} ${BANCO_EXTERNO_ORDENADO}.txt > ${}.txt
 
