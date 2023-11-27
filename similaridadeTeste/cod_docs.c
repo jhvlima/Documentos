@@ -1,7 +1,5 @@
 /*
-    Esse programa gera um arquivo binario com a similaridade de todos os documentos entre si
-
-    Eh gerado um codigos_documentos.txt que contem os arquivos e seus ino
+    Esse programa gera um arquivo binario com a similaridade de todos os documentos de um diretrio entre si
 
     Eh preciso passar no argumento o diretorio com os arquivos com vetores de documentos em formato binario e um arquivo que
     contem a quantidade total de palavras que o banco de palavras possui.
@@ -22,8 +20,6 @@ typedef struct
     int codigo_2;
     float valor;
 }tSimilaridade;
-
-
 
 typedef struct
 {
@@ -166,7 +162,6 @@ int main(int argc, char *argv[])
         return 1;
     }
     const char *directoryPath = argv[1]; // Replace with your directory path
-    listFilesInDirectory(directoryPath);
 
     //  Le o numero total de palavras no banco de palavras
     FILE *banco_palavras_file;

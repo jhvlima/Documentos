@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 vet/teste2.bin 187111
 vet/teste4.bin 187105
 vet/teste3.bin 187106
 vet/teste6.bin 187108
 vet/teste1.bin 187103
+=======
+vet/teste5.bin 14418022
+vet/teste1.bin 14418023
+vet/teste2.bin 14418026
+vet/teste4.bin 14418021
+vet/teste3.bin 14418024
+>>>>>>> 8451d38bedcab5b31ef39edbd273bfedb27a7c3b
