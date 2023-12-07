@@ -246,10 +246,9 @@ os
 ou
 outra
 pagina
-painel
 pais
 paises
-palavrasjoao
+palavraspainel
 palocci
 para
 partidos
