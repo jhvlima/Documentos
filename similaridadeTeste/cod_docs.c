@@ -4,6 +4,8 @@
     Eh preciso passar no argumento o diretorio com os arquivos com vetores de documentos em formato binario e um arquivo que
     contem a quantidade total de palavras que o banco de palavras possui.
 
+    Porque da posicao dos diretorios, e como elas funcionam?
+
 */
 
 #include <stdio.h>
@@ -154,6 +156,28 @@ float CalculaSimilaridade(FILE *file_1, FILE *file_2, int total_palavras)
     return resultado;
 }
 
+/*
+*   Essa funcao deve processar o dirent ate encontrar o proximo documento util, contando a posicao desse documento no int * e retornar,
+*   se encontrar outro diretorio entao a funcao faz a recursao chamando ela mesma
+*/
+int ProcessaDiretorio(struct dirent *entrada, DIR *diretorio, int *posicao_diretorio)
+{
+    while ((entrada = readdir(diretorio)) != NULL)
+    {
+        if (strcmp(entrada->d_name, ".") == 0 || strcmp(entrada->d_name, "..") == 0 || entrada->d_type != DT_REG)
+        {
+            if (entrada->d_type == DT_DIR)
+            {
+                ProcessaDiretorio(entrada, diretorio, posicao_diretorio);
+            }
+            continue;
+        }
+        posicao_diretorio++;
+        return 1;
+    }
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 3)
@@ -196,6 +220,26 @@ int main(int argc, char *argv[])
     int posicao_diretorio_1 = 0, posicao_diretorio_2 = 0;
 
     printf("Comecou o processo de leitura dos diretorios\n");
+
+    while (ProcessaDiretorio(entry_1, dir_1, &posicao_diretorio_1))
+    {
+        ProcessaDiretorio(entry_2, dir_2, &posicao_diretorio_2);
+        
+        // talvez alterar a posicao 2
+
+        if (posicao_diretorio_2)
+        {
+            posicao_diretorio_2--;
+            continue;
+        }
+        if (entry_1->d_ino == entry_2->d_ino)
+        {
+            continue;
+        }
+        // Faz o resto do calcuo da similaridade
+    }
+    
+
 
     // Read the directory entries
     while ((entry_1 = readdir(dir_1)) != NULL)
