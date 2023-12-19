@@ -15,6 +15,8 @@
 #include <math.h>
 #include <sys/stat.h>
 
+#define TAM_MAX_PATH 2048
+
 // padrao de impressão binario na matriz de similaridade binária 
 typedef struct
 {
@@ -48,8 +50,8 @@ void listFilesInDirectory(const char *directoryPath)
     file = fopen("codigos_documentos.txt", "w");
     while ((entry = readdir(dir)) != NULL)
     {
-        char filePath[256]; // Adjust the size as needed
-        snprintf(filePath, sizeof(filePath), "%s/%s", directoryPath, entry->d_name);
+        char filePath[1024]; // Adjust the size as needed
+        sprintf(filePath, "%s/%s", directoryPath, entry->d_name);
 
         if (stat(filePath, &fileStat) == 0)
         {
@@ -160,19 +162,22 @@ float CalculaSimilaridade(FILE *file_1, FILE *file_2, int total_palavras)
 *   Essa funcao deve processar o dirent ate encontrar o proximo documento util, contando a posicao desse documento no int * e retornar,
 *   se encontrar outro diretorio entao a funcao faz a recursao chamando ela mesma
 */
-int ProcessaDiretorio(struct dirent *entrada, DIR *diretorio, int *posicao_diretorio)
+int ProcessaDiretorio(struct dirent *entrada, DIR *diretorio, char* path)
 {
     while ((entrada = readdir(diretorio)) != NULL)
     {
+        printf("\n");
+        printf("ACHARAM: %s\n", entrada->d_name);
         if (strcmp(entrada->d_name, ".") == 0 || strcmp(entrada->d_name, "..") == 0 || entrada->d_type != DT_REG)
         {
             if (entrada->d_type == DT_DIR)
             {
-                ProcessaDiretorio(entrada, diretorio, posicao_diretorio);
+                sprintf(path, "%s/", entrada->d_name);
+                ProcessaDiretorio(entrada, diretorio, path);
             }
             continue;
         }
-        posicao_diretorio++;
+        sprintf(path, "%s", entrada->d_name);
         return 1;
     }
     return 0;
@@ -180,12 +185,15 @@ int ProcessaDiretorio(struct dirent *entrada, DIR *diretorio, int *posicao_diret
 
 int main(int argc, char *argv[])
 {
+    printf("INICIOU A SIMILARIDADE\n");
     if (argc != 3)
     {
         printf("Deve ser passado: %s <diretorio> <universo_palavras.txt>.\n", argv[0]);
         return 1;
     }
     const char *directoryPath = argv[1]; // Replace with your directory path
+
+    listFilesInDirectory(directoryPath);
 
     //  Le o numero total de palavras no banco de palavras
     FILE *banco_palavras_file;
@@ -218,29 +226,103 @@ int main(int argc, char *argv[])
     struct dirent *entry_2;
 
     int posicao_diretorio_1 = 0, posicao_diretorio_2 = 0;
-
+    char *path_completo_2 = calloc(1, TAM_MAX_PATH); 
+    char *path_completo_1 = calloc(1, TAM_MAX_PATH);
     printf("Comecou o processo de leitura dos diretorios\n");
 
-    while (ProcessaDiretorio(entry_1, dir_1, &posicao_diretorio_1))
+    /*while (ProcessaDiretorio(entry_1, dir_1, &posicao_diretorio_1))
     {
-        ProcessaDiretorio(entry_2, dir_2, &posicao_diretorio_2);
-        
-        // talvez alterar a posicao 2
-
-        if (posicao_diretorio_2)
+        posicao_diretorio_2 = posicao_diretorio_1;
+        rewinddir(dir_2);
+        while (ProcessaDiretorio(entry_2, dir_2, &posicao_diretorio_2))
         {
-            posicao_diretorio_2--;
-            continue;
+            if (entry_1->d_ino == entry_2->d_ino)
+            {
+                continue;
+            }
+            if (strcmp(entry_2->d_name, ".") == 0 || strcmp(entry_2->d_name, "..") == 0)
+            {
+                continue;
+            }
+            // Faz o resto do calcuo da similaridade
         }
-        if (entry_1->d_ino == entry_2->d_ino)
-        {
-            continue;
-        }
-        // Faz o resto do calcuo da similaridade
     }
-    
+    */
+   while (ProcessaDiretorio(entry_1, dir_1, path_completo_1))
+    {
+        rewinddir(dir_2);
+        while (ProcessaDiretorio(entry_2, dir_2, path_completo_2))
+        {
+            printf("INO 1: %ld\n", entry_1->d_ino);
+            printf("INO 2: %ld\n", entry_2->d_ino);
+            if (entry_1->d_ino == entry_2->d_ino)
+            {
+                continue;
+            }
+            // Faz o resto do calcuo da similaridade
+            //  Se a similaridade desses documentos ainda nao foi guardada entao sera calculada aqui
+            printf("\n");
+            printf("LOOP DO %s\n", entry_1->d_name);
+            printf("ESSE EO PATH 1: %s\n", path_completo_1);
+            printf("ESSE EO PATH 2: %s\n", path_completo_2);
+            // Open the file 1
+            char full_path_1[1024];
+            snprintf(full_path_1, sizeof(full_path_1), "%s/%s", argv[1], entry_1->d_name);
+            FILE *file_1 = fopen(full_path_1, "rb");
+            if (file_1 == NULL)
+            {
+                perror("fopen");
+                closedir(dir_1);
+                return EXIT_FAILURE;
+            }
 
+            // Open the file 2
+            char full_path_2[1024];
+            snprintf(full_path_2, sizeof(full_path_2), "%s/%s", argv[1], entry_2->d_name);
+            FILE *file_2 = fopen(full_path_2, "rb");
+            if (file_2 == NULL)
+            {
+                perror("fopen");
+                closedir(dir_2);
+                return EXIT_FAILURE;
+            }
 
+            printf("file1: %s\n", full_path_1);
+            printf("file2: %s\n", full_path_2);
+
+            if (entry_1->d_ino < entry_2->d_ino)
+            {
+                sim.codigo_1 = entry_1->d_ino;
+                sim.codigo_2 = entry_2->d_ino;
+            }
+            else
+            {
+                sim.codigo_2 = entry_1->d_ino;
+                sim.codigo_1 = entry_2->d_ino;
+            }
+            
+            float valor = CalculaSimilaridade(file_1, file_2, total_palavras);
+            if (valor)
+            {
+                sim.valor = valor;
+                fwrite(&sim, sizeof(tSimilaridade), 1, matriz);
+                printf("<%s , %s> = %f\n", full_path_1, full_path_2, valor);
+            }
+            else
+            {
+                printf("Similaridade 0 \n");
+            }
+            fclose(file_1);
+            fclose(file_2);
+        }
+    }
+    fclose(matriz);
+    closedir(dir_1);
+    closedir(dir_2);
+    return 0;
+}
+
+/*
     // Read the directory entries
     while ((entry_1 = readdir(dir_1)) != NULL)
     {
@@ -328,3 +410,4 @@ int main(int argc, char *argv[])
     closedir(dir_2);
     return 0;
 }
+*/

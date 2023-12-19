@@ -1,3 +1,11 @@
+/*
+*   Este codigo em C pode ser usado para contar a quantidade de palavras ou documentos dentro de um arquivo ou diretorio.
+*   A contagem é feita atrves de um comando em shell script, e é obrigatorio passar o path como argumento 
+*
+*/
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
